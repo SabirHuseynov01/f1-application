@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: telemetry-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/f1_telemetry_db
+    username: f1user
+    password: f1pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=2m
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: telemetry-service-group
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.example.f1telemetryservic
+
+server:
+  port: 8084
+
+# Service URLs
+session-service:
+  url: ${SESSION_SERVICE_URL:http://localhost:8082}
+timing-service:
+  url: ${TIMING_SERVICE_URL:http://localhost:8083}
+
+# Kafka Topics
+kafka:
+  topics:
+    telemetry: f1.telemetry.raw
+    car-data: f1.telemetry.car-data
+    position: f1.telemetry.position
+
+logging:
+  level:
+    com.example.f1telemetryservic: INFO

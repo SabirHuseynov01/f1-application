@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: analytics-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/f1_analytics_db
+    username: f1user
+    password: f1pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: analytics-service-group
+      auto-offset-reset: latest
+
+server:
+  port: 8088
+
+kafka:
+  topics:
+    telemetry: f1.telemetry.raw
+    laps: f1.timing.laps
+    stints: f1.timing.stints
+
+logging:
+  level:
+    com.example.f1analyticsservice: INFO

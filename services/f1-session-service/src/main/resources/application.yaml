@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: session-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/f1_session_db
+    username: f1user
+    password: f1pass
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 20
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=10m
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: 8082
+
+logging:
+  level:
+    com.example.f1sessionservice: DEBUG
+    org.springframework.web: DEBUG
+
+  resilience4j:
+    retry:
+      instances:
+        openf1:
+          max-attempts: 3
+          wait-duration: 500ms
+          retry-exceptions:
+            - java.io.IOException
+            - java.util.concurrent.TimeoutException

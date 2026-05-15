@@ -1,0 +1,11 @@
+rootProject.name = 'F1Platform'
+
+// Service Modules
+include 'services:f1-session-service'
+include 'services:f1-notification-service'
+include 'services:f1-timing-service'
+include 'services:f1-telemetry-service'
+include 'services:f1-replay-service'
+include 'services:f1-user-service'
+include 'services:f1-api-gateway'
+include 'services:f1-analytics-service'
